@@ -126,8 +126,8 @@ export class AlbumRepository {
         .$call(withDefaultVisibility)
         .innerJoin('albums_assets_assets as album_assets', 'album_assets.assetsId', 'assets.id')
         .select('album_assets.albumsId as albumId')
-        .select((eb) => eb.fn.min(sql<Date>`("assets"."localDateTime" AT TIME ZONE 'UTC'::text)::date`).as('startDate'))
-        .select((eb) => eb.fn.max(sql<Date>`("assets"."localDateTime" AT TIME ZONE 'UTC'::text)::date`).as('endDate'))
+        .select((eb) => eb.fn.min('assets.localDateTime').as('startDate'))
+        .select((eb) => eb.fn.max('assets.localDateTime').as('endDate'))
         // lastModifiedAssetTimestamp is only used in mobile app, please remove if not need
         .select((eb) => eb.fn.max('assets.updatedAt').as('lastModifiedAssetTimestamp'))
         .select((eb) => sql<number>`${eb.fn.count('assets.id')}::int`.as('assetCount'))
